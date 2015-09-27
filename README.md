@@ -7,9 +7,9 @@ Hack Zer0s intentionally aims to gear up students who have little background kno
 A wide range of technical contents shall be covered quickly for students to have a general picture of how vulnerabilities can be exposed and trending in Vulnerabilities Disclosure during 10 weeks. The general structure of this long seminar will be given at below (and may subject to change). As we progress, we will unlock the topic that will be covered in the week and attendees will be notified by email.
 
 Week 1: Introduction; (Next Week 30/9/2015)
-- Trending in Vulnerabilities Disclosure.
-- Introduction to Penetration Testing Cycle.
-- Demo: Hacking a Wordpress blog - the modern-semantic personal publishing platform.
+*Trending in Vulnerabilities Disclosure.[Slides](http://slides.com/lala/deck/live#/)
+*Introduction to Penetration Testing Cycle.[Slides](http://slides.com/lala/deck/live#/)
+*Demo: Hacking a Wordpress blog - the modern-semantic personal publishing platform. [Video](https://www.youtube.com/watch?v=4FoBX1m8VFA&feature=youtu.be)
 
 Week 2: Source Code Auditing, Part 1;
 Week 3: Source Code Auditing, Part 2;
