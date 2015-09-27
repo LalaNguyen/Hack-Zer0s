@@ -1,6 +1,6 @@
 # Hack-Zer0s
 
-We were inspired by the Hack-Night project and thus, decided to run a similar sobering introduction to offensive security on every Wednesday's lunch at 12:00 pm. The course duration is expected to be around 1 hour and is Open to Anyone who shares passions for learning technology.
+We were inspired by the [Hack-Night project](https://github.com/isislab/Hack-Night) and thus, decided to run a similar sobering introduction to offensive security on every Wednesday's lunch at 12:00 pm. The course duration is expected to be around 1 hour and is Open to Anyone who shares passions for learning technology.
 
 Hack Zer0s intentionally aims to gear up students who have little background knowledge (almost 0) with practical skills on the field of the cyber security. By the end of the course, each student is expected to have a good understanding of the related topics, including Code Auditing, Vulnerability Exploiting, Cryptography, Forensic.
 
