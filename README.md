@@ -7,11 +7,13 @@ We were inspired by the [Hack-Night project](https://github.com/isislab/Hack-Nig
 
 ######  Time: Every Wednesday at 12:00 pm.
 #
+
 Hack Zer0s intentionally aims to gear up students who have little background knowledge (almost 0) with practical skills on the field of the cyber security. By the end of the course, each student is expected to have a good understanding of the related topics, including Code Auditing, Vulnerability Exploiting, Cryptography, Forensic.
 
 A wide range of technical contents shall be covered quickly for students to have a general picture of how vulnerabilities can be exposed and trending in Vulnerabilities Disclosure during 10 weeks. The general structure of this long seminar will be given at below (and may subject to change). As we progress, we will unlock the topic that will be covered in the week and attendees will be notified by email.
 
 [x]  Week 1: Introduction to Cyber Security (30/9/2015)
+
 * Trending in Vulnerabilities Disclosure. [Slides](http://slides.com/lala/deck/live#/)
 * Introduction to Penetration Testing Cycle. [Slides](http://slides.com/lala/deck/live#/)
 * Demo: Exploiting a Wordpress blog. [Video](https://www.youtube.com/watch?v=4FoBX1m8VFA&feature=youtu.be)
