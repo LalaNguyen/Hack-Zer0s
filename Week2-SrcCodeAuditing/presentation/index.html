@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Source Code Auditing - Day 1</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Source Code Auditing - Day 1">
+  <meta name="author" content="Nguyen Hoang Minh">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/github.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="./assets/css/backgrounds.css"></link>
+<link rel=stylesheet href="./assets/css/captions.css"></link>
+<link rel=stylesheet href="./assets/css/custom.css"></link>
+<link rel=stylesheet href="./assets/css/ribbons.css"></link>
+<link rel=stylesheet href="./assets/css/text.css"></link>
+
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>Source Code Auditing - Day 1</h1>
+    <h2></h2>
+    <p>Nguyen Hoang Minh<br/>Teaching Assistant</p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h2>Agenda</h2>
+  </hgroup>
+  <article data-timings="">
+    <ol>
+<li>Introduction to Common Weakness Enumerator (CWE).</li>
+<li>Source Code Auditing.</li>
+<li>Memory Corruption.</li>
+<li>Auditing Case: Improper Null Termination (CWE-170)</li>
+<li>Countering the issue of Software Defects before Hackers strike.</li>
+</ol>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class2" id="id2" style="background:white;">
+  <hgroup>
+    <h2>About CWE</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><q><span style="color:red">Targeted</span> to developers and security practitioners. CWE is a formal list of <span style="color:red">software weakness types</span>. CWE provides a baseline for <span style="color:red">vulnerability identification</span>, mitigation, and prevention efforts.</q> </p>
+
+<p><span style="float:right;">source: official CWE site.</span></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class3" id="id3" style="background:white;">
+  <hgroup>
+    <h2>Types of Software Vulnerability</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <ul>
+<li>Buffer Overflows, Format Strings, Etc.</li>
+<li>Structure and Validity Problems</li>
+<li>Common Special Element Manipulations</li>
+<li>Channel and Path Errors</li>
+<li>Handler Errors</li>
+<li>User Interface Errors</li>
+</ul>
+
+</div>
+<div style='float:right;width:48%;'>
+  <ul>
+<li>Pathname Traversal and Equivalence Errors</li>
+<li>Authentication Errors</li>
+<li>Resource Management Errors</li>
+<li>Insufficient Verification of Data</li>
+<li>Code Evaluation and Injection</li>
+<li>Randomness and Predictability</li>
+</ul>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class4" id="id4" style="background:white;">
+  <article data-timings="">
+    <p><iframe src = 'https://cwe.mitre.org/data/definitions/170.html' height='1200px'></iframe></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class5" id="id5" style="background:white;">
+  <hgroup>
+    <h2>Source Code Auditing</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>The process of <span style="color:red">reading source code to find vulnerabilities</span>.</li>
+<li>Necessary for <span style="color:red">finding implementation bugs</span>
+
+<ul>
+<li>Memory Corruption (Heap / Stack Memory Errors, Overwritten Addresses)</li>
+<li>Memory Leak (HeartBleed)</li>
+<li>In-line Injection (SQL, filenames, XSS)</li>
+</ul></li>
+<li>Throughly understanding programming language is necessary.</li>
+<li>Be able to <span style="color:red">Trace &amp; Debug</span> by observing stack memory.</li>
+</ul>
+
+<p><em>Note</em>: The designer has good intentions. But somehow mistakenly implement a bug due to not properly handle CWEs.</p>
+
+<p><img src="assets/img/heartbleed.png" alt="width"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class6" id="id6" style="background:white;">
+  <hgroup>
+    <h2>Methodology</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <ul>
+<li>There is <span style="color:red">NEVER</span> enough time.
+
+<ul>
+<li>Large Code-lines.</li>
+<li>Time engagement.</li>
+</ul></li>
+<li>You do not want your <span style="color:red">clients</span> to check code for you.</li>
+<li><span style="color:red">The good practice to avoid bugs</span> is to self-audit your coding styles.</li>
+<li><span style="color:red">Do not</span> leave variable uninitialized that would lead to vulnerabilities.</li>
+</ul>
+
+<p>=&gt; Using <span style="color:red">Code Auditing Tools</span> will save you time : ).</p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <pre><code class="c">int doAuth(char *name, char *pw)
+   {
+        int auth;
+        if (userIsBanned(name))
+          {
+                auth = 0;
+          }
+        if (authenticateUser(name, pw))
+          {
+                auth = 1;
+          }
+        return auth;
+   }
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class7" id="id7" style="background:white;">
+  <hgroup>
+    <h2>Code Auditing Tools (CATs)</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>The strength of using CATs is:</p>
+
+<ul>
+<li>Highlighted editors &amp; Navigators are useful.</li>
+<li>Basic auxiality functions are provided.
+
+<ul>
+<li>Tracking variables, functions</li>
+<li>Generic search, auto-complete.</li>
+</ul></li>
+</ul>
+
+<div style='float:left;width:48%;' class='centered'>
+  <p><b>Syntax Aware Tools</b></p>
+
+<ul>
+<li>VI / VIM.</li>
+<li>Notepad++ / Sublime / TextMate / Atom.</li>
+<li>Eclipse / Visual Studio / Xcode.</li>
+</ul>
+
+<p><span style="color:red">Weakness</span>: Lack of comprehensive view for the entire projects. It often involves gnanular view.</p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><b>Static Analysis Tools</b></p>
+
+<ul>
+<li>Fortify</li>
+<li>Klocwork</li>
+<li>Coverity</li>
+<li>SonarQube</li>
+<li>CPPCheck (online)</li>
+</ul>
+
+<p><span style="color:red">Weakness</span>: Many false positives &amp; often miss vulnerabilities without human interventions.</p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class8" id="id8" style="background:white;">
+  <hgroup>
+    <h2>Implementation Bugs</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Implementation Bug is an <span style="color:red">unintentionally written line-codes</span> that allow attacker to deviate the strange actions from legistimate design.</p>
+
+<p>They are commonly caused by:</p>
+
+<ul>
+<li>Failure to validate input. (XSS, SQL Injection)</li>
+<li>Misuse an Application Programming Interface. (Facebook API)</li>
+<li>Miscalculation &amp; Inappropriate Error Handling Techniques. (Buffer Overflow)</li>
+</ul>
+
+<p><span style="float:right;"><img src="assets/img/programbugs.jpg" alt="width">
+</span></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class9" id="id9" style="background:white;">
+  <hgroup>
+    <h2>Memory Corruption</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><q><span style="color:red">Memory Corruption</span> happens when the <span style="color:red">contents of a memory location</span> are <span style="color:red">unintentionally modified</span> due to programming error. When the corrupted memory contents are used later in the computer program, it leads to <span style="color:red">program crash</span> or strange behaviours.</q></p>
+
+<p><span style="float:right;">source: Wikipedia</span></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class9" id="id9" style="background:white;">
+  <hgroup>
+    <h2>Memory Corruption</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li><span style="color:red">Program crash</span> and <span style="color:red">strange behaviours</span> = busticated &amp; exploitable.</li>
+<li>Responsible for many infamous vulnerabilities (Buffer Overflows/Overwrite)</li>
+<li>Classic implementation bug.</li>
+<li>Been published since the 1980&#39;s, still on going today.</li>
+</ul>
+
+<p>Example:</p>
+
+<pre><code class="c">int vuln_function(char *data)
+  {
+        char buf[128];
+        /* make copy of data to buf */
+        strcpy(buf, data)
+        /* ... */
+        return;
+  }
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class10" id="id10" style="background:white;">
+  <hgroup>
+    <h2>How does strcpy work ?</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li><p>A <span style="color:red">string</span> is a sequence of characters/bytes.</p>
+
+<ul>
+<li><b>char *bufs = &quot;Hello World&quot;</b> can be represented by 48 65 6C 6C 6F 20 57 6F 72 6C 64 <span style="color:red">00</span> </li>
+<li><b>char bufs[14] = &quot;Hello World&quot;</b> can be represented by 48 65 6C 6C 6F 20 57 6F 72 6C 64 <span style="color:red">00 00 00 00</span> </li>
+<li>If you specify bufs[11], string will not be terminated.</li>
+</ul></li>
+<li><p>A string in C is terminated by a NULL byte 0x0 (a equivalent ascii character &#39;\0&#39;)</p></li>
+<li><p>Suppose we want to copy string from bufs to a char dest[6].</p></li>
+<li><p>A <b>strcpy(dest, bufs)</b> performs a string copy from buf to a destination string.</p>
+
+<ul>
+<li>Bufs: 48 65 6C 6C 6F 20 57 6F 72 6C 64 00</li>
+<li>Dest: 00 00 00 00 00 00 - Before Copy.</li>
+<li>Dest: 48 65 6C 6C 6F 20 <span style="color:red">57 6F 72 6C 64 00</span> - After Copy.</li>
+</ul></li>
+<li><p>Because <span style="color:red">strcpy is unbounded</span>, if there is more data in the bufs than there is space available, it will overwrite the memory of the server&#39;s stack. If the memory is not available, program will crash ; ).</p></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class11" id="id11" style="background:white;">
+  <hgroup>
+    <h2>Memory Corruption</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>So <span style="color:red">unbounded copy</span> is not good.</li>
+<li><b>strcpy()</b> unlikely to be seen, except in <span style="color:red">CTF</span> where you would see tons of them. x)</li>
+<li>Just because a better version of strcpy exists, does not mean it is not susceptible to memory corruption.</li>
+<li>Let&#39;s try <span style="color:red">bounded</span> <b>strncpy(char *dest, char *src, size_t n)</b></li>
+<li>Now there is a <span style="color:red">parameter n</span> to limit the length of copied data.</li>
+</ul>
+
+<p>Example:</p>
+
+<pre><code class="c">int vuln_function(char *data)
+  {
+        char buf[128];
+        /* make copy of data to buf */
+        strncpy(buf, data, sizeof(buf))
+        /* ... */
+        return;
+  }
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class12" id="id12" style="background:white;">
+  <hgroup>
+    <h2>What can go wrong ?</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>If length of <b>data</b> &gt; <b>buf</b>: </p>
+
+<ul>
+<li><span style="color:red">Improper-NULL termination</span> (CWE-170).</li>
+</ul>
+
+<p>Else if length of <b>data</b> &lt; <b>buf</b>: </p>
+
+<ul>
+<li><span style="color:red">Improper-NULL termination</span> (CWE-170).</li>
+<li><span style="color:red">Buffer Overflow</span> (CWE-121).</li>
+</ul>
+
+<p>The <b>strncpy()</b> does not account for NULL termination. Please use it with <span style="color:red">cautious</span>.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class13" id="id13" style="background:white;">
+  <hgroup>
+    <h2>Auditing Case: Improper Null Termination (CWE-170)</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>In this scenario, we will demonstrate how to observe strange behaviors and debug a program that has a weakness CWE 170 using the following two methods:</p>
+
+<ul>
+<li>Manual. <a href="https://youtu.be/2WJ1BmncUpw">Video #0:00-#2:43 </a> </li>
+<li>Automatic with <a href="http://cppcheck.sourceforge.net/">CPPcheck</a> embedded in SonarQube.<a href="https://youtu.be/2WJ1BmncUpw?t=2m44s">Video #0:2.44-#5:54</a> </li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class14" id="id14" style="background:white;">
+  <hgroup>
+    <h2>Countering Defected Softwares</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li><span style="color:red">Security</span> starts with developers.</li>
+<li><span style="color:red">Prevention</span> is the best medicine.
+
+<ul>
+<li>Make sure take advantages of static code analysis tools.</li>
+</ul></li>
+<li>Constantly find efficient approaches to create a <span style="color:red">standards-compliant software</span>.</li>
+</ul>
+
+<p>source: <a href="http://goo.gl/W1l7tD">Early software detection compliant</a> - By RogueWave</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class15" id="id15" style="background:white;">
+  <hgroup>
+    <h2>Acknowledgement</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>All the contents are derived from <a href="https://github.com/isislab/Hack-Night">Hack-Night Project</a> and some information are <span style="color:red">slightly tailored</span> to convey speaker&#39;s experiences. Thank for listening : )</p>
+
+<p>Please access our free materials at:</p>
+
+<ul>
+<li>Github: <a href="https://github.com/LalaNguyen/Hack-Zer0s">https://github.com/LalaNguyen/Hack-Zer0s</a></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='Agenda'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='About CWE'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='Types of Software Vulnerability'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='NA'>
+         4
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=5 title='Source Code Auditing'>
+         5
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=6 title='Methodology'>
+         6
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=7 title='Code Auditing Tools (CATs)'>
+         7
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=8 title='Implementation Bugs'>
+         8
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=9 title='Memory Corruption'>
+         9
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=10 title='Memory Corruption'>
+         10
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=11 title='How does strcpy work ?'>
+         11
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=12 title='Memory Corruption'>
+         12
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=13 title='What can go wrong ?'>
+         13
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=14 title='Auditing Case: Improper Null Termination (CWE-170)'>
+         14
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=15 title='Countering Defected Softwares'>
+         15
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=16 title='Acknowledgement'>
+         16
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>
