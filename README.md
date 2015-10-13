@@ -18,14 +18,16 @@ A wide range of technical contents shall be covered quickly for students to have
 * Introduction to Penetration Testing Cycle. [Slides](http://slides.com/lala/deck/live#/)
 * Demo: Exploiting a Wordpress blog. [Video](https://www.youtube.com/watch?v=4FoBX1m8VFA&feature=youtu.be)
 
-[x] Week 2: Source Code Auditing, Part 1 (7/10/2015)
-* Auditing a Network Security. [Slides]
+[x] Week 2: Source Code Auditing (7/10/2015)
+
 * Introduction to Common Weakness Enumaration(CWE). [Slides](Week2-SrcCodeAuditing/presentation/index.html)
 * Memory Corruption. (C knowledge is recommended but not required) [Slides](Week2-SrcCodeAuditing/presentation/index.html)
 * Detecting the issue of Software Defects before Hackers strike.  [Slides](Week2-SrcCodeAuditing/presentation/index.html)
 * Demo: Using SonarQube for secure coding practices throughout the software development lifecycle. [Video](https://www.youtube.com/watch?v=2WJ1BmncUpw)
 
-[ ] Week 3: Source Code Auditing, Part 2;
+[x] Week 3: Guide To CTF (14/10/2015)
+* Jeopardy: Rules & Challenges. [Slides](http://slides.com/lala/guide-to-ctf#/)
+* Demo: Manual Error-based SQL injection vs Automated SQLmap (SQL knowledge is recommended but not required).[Video](https://youtu.be/GWQaHSU7ZNI)
 
 [ ] Week 4: Web Security, Part 1;
 
