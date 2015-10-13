@@ -227,5 +227,12 @@ http://securityoverride.org/challenges/basic/12/index.php?id=1%20union%20select%
 
 There is only 1 entry in the table. And it’s a result.
 
+### Adknowledgement.
+1. [The target site was one of challenges in securityoverride.](www.securityoverride.org/)
+2. [SQL tutorial - W3 School.](www.w3schools.com/sql/)
+3. [SQL Injection - OWASP Testing Guide.](https://www.owasp.org/images/5/52/OWASP_Testing_Guide_v4.pdf) 
+4. [Uncommon SQL Injection - N3T D3VIL.](https://www.exploit-db.com/docs/174.pdf)
+5. [SQL Injection guide by polemarchos.](http://securityoverride.org/infusions/pro_download_panel/download.php?did=83)
+
 
 
