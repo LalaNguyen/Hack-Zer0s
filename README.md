@@ -28,9 +28,13 @@ A wide range of technical contents shall be covered quickly for students to have
 [x] Week 3: Guide To CTF (14/10/2015)
 * Jeopardy: Rules & Challenges. [Slides](http://slides.com/lala/guide-to-ctf#/)
 * Demo: Manual Error-based SQL injection vs Automated SQLmap (SQL knowledge is recommended but not required).[Video](https://youtu.be/GWQaHSU7ZNI)
-* SQL Injection Guide [HTML](http://rpubs.com/LalaNg/sql-injection) 
+* SQL Injection Guide [HTML](http://rpubs.com/LalaNg/sql-injection)
 
-[ ] Week 4: Web Security, Part 1;
+[x] Week 4: Web Security, Part 1;
+* Web Fundamental Concept (HTTP Protocol, Session, Cookies)[Slides](http://slides.com/lala/guide-to-web-pentest/live#/)
+* Common Web Vulnerabilities Discussion & Pentesting Methodology[Slides](http://slides.com/lala/guide-to-web-pentest/live#/4)
+* Demo: Manual Error-based SQL injection vs Automated SQLmap (SQL knowledge is recommended but not required).[Video](https://youtu.be/GWQaHSU7ZNI)
+* Demo: Compromise victim's browser using Stored XSS Exploiting framework BeEf[Video](https://youtu.be/Ce53IGXyxRU)
 
 [ ] Week 5: Web Security, Part 2;
 
