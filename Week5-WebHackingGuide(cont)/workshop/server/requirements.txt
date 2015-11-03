@@ -1,0 +1,5 @@
+binwalk==2.0.0
+Django==1.8.5
+django-cors-headers==1.1.0
+dnet==1.12
+Magic-file-extensions==0.2

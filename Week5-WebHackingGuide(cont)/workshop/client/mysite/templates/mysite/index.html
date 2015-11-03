@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<header><!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" integrity="sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+
+
+</header>
+<body>
+
+<div class="container">
+    <h3>CROSS-DOMAIN POLICY TESTER</h3>
+    <hr style="width: 100%; color: black; height: 1px; background-color:black;" />
+
+  <div class="row">
+    <div class="col-xs-6">
+      <p  id="demo"></p>
+      <p  class="bg-danger" id="error"></p>
+      <button type="button"class="btn btn-primary" onclick="loadDoc()">Get polls from 127.0.0.1:8000</button>
+    </div>
+    <div class="col-xs-6">
+      <p id="demo1"></p>
+      <p  class="bg-danger" id="error1"></p>
+      <button type="button"class="btn btn-primary" onclick="loadPostDoc()">Post vote to 127.0.0.1:8000</button>
+    </div>
+</div>
+</div>
+  <script>
+function loadDoc() {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+      document.getElementById("demo").innerHTML =  "Results:"+xhttp.responseText;
+    }
+    else if (xhttp.readyState ==4 && xhttp.status == 0){
+      document.getElementById("error").innerHTML = "No 'Access-Control-Allow-Origin' header is present on the requested resource. Origin 'http://127.0.0.1:5000' is therefore not allowed access.";
+    }
+  }
+  //xhttp.open("GET", "1/", true);
+  xhttp.open("GET", "http://127.0.0.1:8000/polls/", true);
+  xhttp.send();
+
+}
+</script>
+
+<script>
+function loadPostDoc() {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+      document.getElementById("demo1").innerHTML = "Results:"+xhttp.responseText;
+    }
+    else if (xhttp.readyState ==4 && xhttp.status == 0){
+      document.getElementById("error1").innerHTML = "No 'Access-Control-Allow-Origin' header is present on the requested resource. Origin 'http://127.0.0.1:5000' is therefore not allowed access.";
+    }
+  }
+  xhttp.open("POST", "http://127.0.0.1:8000/polls/1/vote/", true);
+  xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  xhttp.send("choice=2");
+}
+</script>
+</body>
+</html>
+
+</script>
