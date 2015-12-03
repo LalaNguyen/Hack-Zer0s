@@ -44,14 +44,16 @@ A wide range of technical contents shall be covered quickly for students to have
 * A5 - Insecure Direct Object Reference Explanation [Slides](http://slides.com/lala/guide-to-web-pentest/live#/10)
 * Demo: Parameter Manipulation [Video](https://youtu.be/jtGkT7uDr4A?t=3m58s)
 
-[ ] Week 6: Reverse Engineering, Part 1;
+[x] Week 6: Reverse Engineering [Slides](https://slides.com/lala/deck-4/)
+* Understand the standard memory layout of running processes on the x86 architecture
+* Identify buffer overflows and related memory-based vulnerabilities in C programs, such as those based on format strings
+* Construct a simple exploit of a buffer overflow. (Project)
+* Understand how exploits can inject remote code, and perform other security compromises
 
-[ ] Week 7: Reverse Engineering, Part 2;
+[x] Week 7: Shell Coding[Slides](https://slides.com/lala/deck-4/)
+* How a machine code can be injected to alter a program flow. Very often, you would want to inject a code that it allows us to open up the remote shell, and this common hacking technique is well-known as obtaining the shell code, which is very interesting : )
+* Understand general compiling process of a C program, including Compiling, Assembling, Linking & Loader.
+* You will be introduced with new terminology such as Machine code, Object File, Debugger, Semantic Analysis ...and you will meet them again in the future when we do Compiler or Computer Architecture.
 
-[ ] Week 8: Reverse Engineering, Part 3;
-
-[ ] Week 9: Reverse Engineering, Part 4;
-
-[ ] Week 10: Exploitation.
 
 Speaker: Dr. Tran Manh Ha, Nguyen Hoang Minh.
